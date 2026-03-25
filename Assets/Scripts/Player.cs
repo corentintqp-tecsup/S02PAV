@@ -1,5 +1,6 @@
-using Unity.VisualScripting;
 using UnityEngine;
+using System;
+using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
@@ -7,16 +8,29 @@ public class Player : MonoBehaviour
     [SerializeField] private Health health = new();
     [SerializeField] private Weapon weapon = new();
 
-    void Start()
+    private InputSystem_Actions inputs;
+
+
+    void Awake()
     {
+        inputs = new();
     }
 
-    void Update()
+    private void OnEnable()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            Attack(enemy);
-        }
+        inputs.Player.Attack.performed += OnAttack;
+        inputs.Player.Enable();
+    }
+
+    private void OnDisable()
+    {
+        inputs.Player.Attack.performed -= OnAttack;
+        inputs.Player.Disable();
+    }
+
+    private void OnAttack(InputAction.CallbackContext context)
+    {
+        Attack(enemy);
     }
 
     public void Attack(Enemy target)

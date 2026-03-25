@@ -9,12 +9,16 @@ public class Enemy : MonoBehaviour
         if (IsDead())
             return;
         health.TakeDamage(damage);
+        Debug.Log($"Enemy took {damage} damage, remaining health: {health.GetHealth()}");
     }
 
     void Update()
     {
         if (IsDead())
+        {
+            Debug.Log("Enemy is dead!");
             Destroy(gameObject);
+        }
     }
 
     public bool IsDead()
